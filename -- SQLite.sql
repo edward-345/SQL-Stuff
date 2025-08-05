@@ -20,4 +20,14 @@ VALUES ("biggest", 7.9, 3.8, 6.4, 2);
 
 SELECT * FROM Test
 
--- Creating temp table
+-- Creating temp table, need to run all at once
+CREATE TEMPORARY TABLE temp_test AS 
+SELECT * FROM iris
+WHERE petal_length >= 1.2;
+
+SELECT * FROM temp_test;
+
+-- Comment out chunks, the line below is a comment and wont run
+/*
+SELECT * FROM iris LIMIT 20;
+*/
