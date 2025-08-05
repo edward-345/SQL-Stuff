@@ -1,4 +1,4 @@
--- SQLite
+-- SQLite need comma after colnames
 SELECT * FROM iris LIMIT 10;
 
 -- Creating a new table
@@ -31,3 +31,29 @@ SELECT * FROM temp_test;
 /*
 SELECT * FROM iris LIMIT 20;
 */
+
+-- IN operator, specify a range of conditions, look for specific values
+-- Returns sepal_length and sepal_width of rows in 'Iris-setosa'
+-- More versatile, can select more conditions
+-- NEED to include ()
+SELECT sepal_length, sepal_width FROM iris
+WHERE species IN ('Iris-setosa')
+
+-- OR operator, note if first cond is satisfied, will not check second
+SELECT petal_length, petal_width FROM iris
+WHERE petal_length > 5 OR petal_width > 5
+
+-- AND will always be processed first so () around OR 
+SELECT * FROM iris
+WHERE (petal_length > 5 OR petal_width > 5)
+AND sepal_width >= 3.5
+
+-- Different from when using without ()
+SELECT * FROM iris
+WHERE petal_length > 5 OR petal_width > 5
+AND sepal_width >= 3.5
+
+-- NOT operator
+SELECT * FROM iris
+WHERE species NOT IN ('Iris-Virginica')
+
