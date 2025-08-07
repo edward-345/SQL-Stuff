@@ -57,3 +57,22 @@ AND sepal_width >= 3.5
 SELECT * FROM iris
 WHERE species NOT IN ('Iris-Virginica')
 
+-- Wildcard and LIKE operator
+-- Selects all species that end with 'osa'
+SELECT * FROM iris
+WHERE species LIKE '%osa'
+
+-- ORDER BY
+-- sepal_length is sorted smallest to largest
+SELECT * FROM iris
+ORDER BY sepal_length
+
+-- sepal_length is sorted descending order
+SELECT * FROM iris
+ORDER BY sepal_length DESC
+
+-- Math operations, follows PEMDAS
+-- Need to define a new column of result
+SELECT sepal_length, sepal_width,
+sepal_length * sepal_width AS sepal_dim
+FROM iris
