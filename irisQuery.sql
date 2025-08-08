@@ -37,7 +37,7 @@ SELECT * FROM iris LIMIT 20;
 -- More versatile, can select more conditions
 -- NEED to include ()
 SELECT sepal_length, sepal_width FROM iris
-WHERE species IN ('Iris-setosa')
+WHERE species IN ('Iris-setosa', 'Iris-versicolor')
 
 -- OR operator, note if first cond is satisfied, will not check second
 SELECT petal_length, petal_width FROM iris
@@ -76,3 +76,45 @@ ORDER BY sepal_length DESC
 SELECT sepal_length, sepal_width,
 sepal_length * sepal_width AS sepal_dim
 FROM iris
+
+-- AVG()
+SELECT ROUND(AVG(sepal_length), 2) AS sepal_length_avg
+FROM iris
+
+-- COUNT(*) Counts all rows in a table regardless of null
+SELECT COUNT(*) FROM iris
+AS total_flowers
+
+-- Counts nrows for a column ignores null
+SELECT COUNT(petal_length) FROM iris
+AS total_petals
+
+-- Can inculde DISTINCT
+SELECT COUNT(DISTINCT petal_length) FROM iris
+AS total_dist_petals
+
+-- MAX and MIN
+SELECT MAX(petal_width) AS max_petal_width,
+MIN(petal_width) AS min_petal_width
+FROM iris
+
+-- SUM
+SELECT SUM(petal_length) AS sum_petal_length
+FROM iris
+
+-- GROUP BY
+-- Gives the average of each grouped by species
+SELECT species, 
+AVG(sepal_length) AS avg_sepal_length
+FROM iris
+GROUP BY species
+-- if the SELECT species column is not defined, still runs but wont
+-- give column showing what group it is from
+
+-- HAVING does what WHERE does after GROUP BY within each group
+-- Albums with 12 or more tracks
+SELECT AlbumID,
+COUNT(TrackID) AS nTracks
+FROM Tracks
+GROUP BY AlbumID
+HAVING nTracks >= 12
