@@ -1,36 +1,36 @@
 -- Check tables within Chinook DB
 SELECT name 
 FROM sqlite_master 
-WHERE type='table'
+WHERE type='table';
 
 -- Albums with 12 or more tracks
 SELECT AlbumID,
 COUNT(TrackID) AS nTracks
 FROM Track
 GROUP BY AlbumID
-HAVING nTracks >= 12
+HAVING nTracks >= 12;
 
 ----------------------------------------------------------------------
 -- SUBQUERIES
 ----------------------------------------------------------------------
 -- Subqueries are queries embedded inside other queries
 -- Will always start with innermost query
-SELECT * FROM Invoice
-SELECT * FROM Customer
+SELECT * FROM Invoice;
+SELECT * FROM Customer;
 
 -- Return the names and id of customers who ordered from U countries
 SELECT CustomerId, FirstName, LastName, Country
 FROM Customer
 WHERE Country IN (SELECT BillingCountry
                   FROM Invoice
-                  WHERE BillingCountry LIKE 'U%')
+                  WHERE BillingCountry LIKE 'U%');
 
 -- Inner queries can only select one column
-SELECT * FROM Playlist 
+SELECT * FROM Playlist; 
 -- PlaylistId, Name
-SELECT * FROM PlaylistTrack
+SELECT * FROM PlaylistTrack;
 -- PlaylistId, TrackID
-SELECT * FROM Track
+SELECT * FROM Track;
 -- TrackId, UnitPrice
 
 -- All playlists containg a track that starts with letter B
@@ -40,7 +40,7 @@ WHERE PlaylistId IN (SELECT PlaylistId
                      FROM PlaylistTrack
                      WHERE (TrackId in (SELECT TrackId
                                         FROM Track
-                                        WHERE Name LIKE 'B%')))
+                                        WHERE Name LIKE 'B%')));
 
 -- Name and region and total number of orders for each
 -- Subqueries involving calculations are different
@@ -54,7 +54,7 @@ LastName,
                      FROM Invoice
                      GROUP BY CustomerId) AS TotalSpent, 
 Country 
-FROM Customer
+FROM Customer;
 
 ----------------------------------------------------------------------
 -- JOINS
@@ -64,19 +64,19 @@ all the other rows of another. Does not match, only does said
 operation so only good for matrix math and finding combinations*/
 
 SELECT EmployeeId, CustomerId
-FROM Employee CROSS JOIN Customer
+FROM Employee CROSS JOIN Customer;
 
 -- INNER JOIN selects records that have matching values in both tables
 SELECT Playlist.PlaylistId,
 Playlist.Name, PlaylistTrack.TrackId
 FROM Playlist INNER JOIN PlaylistTrack
-ON Playlist.PlaylistId = PlaylistTrack.PlaylistId
+ON Playlist.PlaylistId = PlaylistTrack.PlaylistId;
 
 -- Can do the same thing but with aliases
 SELECT pl.PlaylistId,
 Name, TrackId
 FROM Playlist AS pl, PlaylistTrack AS pt
-WHERE pl.PlaylistId = pt.PlaylistId
+WHERE pl.PlaylistId = pt.PlaylistId;
 
 -- SELF JOINs self explanatory
 -- The || ' ' || used to concatenate strings with a space in between
@@ -86,7 +86,7 @@ e2.FirstName || ' ' || e2.LastName AS ManagerName
 FROM Employee e1
 LEFT JOIN Employee e2
 ON e1.ReportsTo = e2.EmployeeId
-ORDER BY EmployeeName
+ORDER BY EmployeeName;
 
 -- sqlite is only capable of left joins..
 
@@ -99,7 +99,7 @@ tracks.AlbumId as Album_Id
 FROM albums
 INNER JOIN artists ON albums.ArtistId = artists.ArtistId
 INNER JOIN tracks ON albums.AlbumId = tracks.AlbumId
-WHERE Artist_Id IN (8)
+WHERE Artist_Id IN (8);
 
 -- Customers with no invoice
 SELECT
@@ -110,7 +110,7 @@ InvoiceId
 FROM customers
 LEFT JOIN invoices
 ON customers.CustomerId = invoices.CustomerId
-WHERE InvoiceId LIKE 'N'
+WHERE InvoiceId LIKE 'N';
 
 -- Total price of album
 SELECT
@@ -120,7 +120,7 @@ SUM(UnitPrice) AS Total_Price
 FROM albums
 INNER JOIN tracks
 ON tracks.AlbumId = albums.AlbumId
-WHERE Title LIKE 'Big Ones'
+WHERE Title LIKE 'Big Ones';
 
 -- Names of tracks for album 'Californication'
 SELECT
@@ -129,7 +129,7 @@ Title
 FROM Tracks
 INNER JOIN Albums
 ON Tracks.AlbumId = Albums.AlbumId
-WHERE Title LIKE 'Californication'
+WHERE Title LIKE 'Californication';
 
 -- Total number of invoices per customer
 SELECT
@@ -141,7 +141,7 @@ COUNT(DISTINCT InvoiceId) AS Total_Invoices
 FROM Customers
 LEFT JOIN Invoices
 ON Customers.CustomerId = Invoices.CustomerId
-GROUP BY Customers.CustomerId
+GROUP BY Customers.CustomerId;
 
 -- Track name, album, artistID, 
 -- and trackID for all albums
@@ -152,4 +152,42 @@ ArtistId,
 TrackId
 FROM Tracks
 INNER JOIN Albums
-ON Tracks.AlbumId = Albums.AlbumId
+ON Tracks.AlbumId = Albums.AlbumId;
+
+----------------------------------------------------------------------
+-- STRING FUNCTIONS
+----------------------------------------------------------------------
+
+-- String concatenate using || ' ' ||
+SELECT
+FirstName || ' ' || LastName AS EmployeeName
+FROM Employee;
+
+-- TRIM, LTRIM, RTRIM
+-- Removes spaces (or specified characters) from both ends
+SELECT TRIM('   hello   ');
+SELECT TRIM('---hello---', '-');
+
+-- Removes spaces (or specified characters) from the right end
+SELECT RTRIM('hello   ');             
+SELECT RTRIM('hello---', '-');
+
+-- Removes spaces (or specified characters) from the left end
+SELECT LTRIM('   hello'); 
+SELECT LTRIM('---hello', '-');
+
+-- Substring SUBSTR(Name of str col, starting char, # of chars)
+SELECT FirstName,
+SUBSTR(FirstName, 2, 3)
+FROM Employee;
+
+-- UPPER and LOWER change case of string
+SELECT UPPER('hello'); -- Returns HELLO
+SELECT LOWER('HELLO'); -- Returns hello
+
+/*DATE — 'YYYY-MM-DD' (e.g., '2025-08-09')
+DATETIME — 'YYYY-MM-DD HH:MM:SS' (e.g., '2025-08-09 14:30:00')
+TIMESTAMP — Often stored as 'YYYY-MM-DD HH:MM:SS.SSS'*/
+
+
+
