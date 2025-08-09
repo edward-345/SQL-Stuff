@@ -89,4 +89,67 @@ ON e1.ReportsTo = e2.EmployeeId
 ORDER BY EmployeeName
 
 -- sqlite is only capable of left joins..
--- LEFT JOIN
+
+-- INNER JOIN
+-- list of album titles and unit prices for artist "Audioslave"
+SELECT
+UnitPrice,
+artists.ArtistId AS Artist_Id,
+tracks.AlbumId as Album_Id
+FROM albums
+INNER JOIN artists ON albums.ArtistId = artists.ArtistId
+INNER JOIN tracks ON albums.AlbumId = tracks.AlbumId
+WHERE Artist_Id IN (8)
+
+-- Customers with no invoice
+SELECT
+FirstName,
+LastName,
+invoices.CustomerId AS Customer_Id,
+InvoiceId
+FROM customers
+LEFT JOIN invoices
+ON customers.CustomerId = invoices.CustomerId
+WHERE InvoiceId LIKE 'N'
+
+-- Total price of album
+SELECT
+Title,
+tracks.AlbumId AS Album_Id,
+SUM(UnitPrice) AS Total_Price
+FROM albums
+INNER JOIN tracks
+ON tracks.AlbumId = albums.AlbumId
+WHERE Title LIKE 'Big Ones'
+
+-- Names of tracks for album 'Californication'
+SELECT
+Name,
+Title
+FROM Tracks
+INNER JOIN Albums
+ON Tracks.AlbumId = Albums.AlbumId
+WHERE Title LIKE 'Californication'
+
+-- Total number of invoices per customer
+SELECT
+FirstName,
+LastName,
+City,
+Email,
+COUNT(DISTINCT InvoiceId) AS Total_Invoices
+FROM Customers
+LEFT JOIN Invoices
+ON Customers.CustomerId = Invoices.CustomerId
+GROUP BY Customers.CustomerId
+
+-- Track name, album, artistID, 
+-- and trackID for all albums
+SELECT
+Name,
+Title,
+ArtistId,
+TrackId
+FROM Tracks
+INNER JOIN Albums
+ON Tracks.AlbumId = Albums.AlbumId
