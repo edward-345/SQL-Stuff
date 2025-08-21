@@ -189,5 +189,65 @@ SELECT LOWER('HELLO'); -- Returns hello
 DATETIME — 'YYYY-MM-DD HH:MM:SS' (e.g., '2025-08-09 14:30:00')
 TIMESTAMP — Often stored as 'YYYY-MM-DD HH:MM:SS.SSS'*/
 
+-- STRFTIME To extract certain parts of a date and time string.
+
+SELECT InvoiceDate,
+STRFTIME('%Y', InvoiceDate) AS Year,
+STRFTIME('%m', InvoiceDate) AS Month,
+STRFTIME('%d', InvoiceDate) AS Day
+FROM Invoice;
+
+-- Tells the current date (wow!)
+SELECT DATE('now');
+
+-- Calculate employee's age from birthdate
+SELECT BirthDate,
+STRFTIME('%Y', BirthDate) AS Year,
+STRFTIME('%m', BirthDate) AS Month,
+STRFTIME('%d', BirthDate) AS Day,
+STRFTIME('now') - BirthDate AS Age --This doesnt work in SQLite maybe
+FROM Employee
+
+----------------------------------------------------------------------
+-- CASE Statements
+----------------------------------------------------------------------
+
+-- Selects the following cols from Employee table with an additional
+-- Calgary col showing Calgary or Other depending on city
+SELECT
+EmployeeId,
+FirstName,
+LastName,
+City,
+CASE City
+    WHEN 'Calgary'
+    THEN 'Calgary'
+ELSE 'Other'
+    END 'Calgary'
+FROM Employee
+ORDER BY LastName, FirstName;
+
+-- Categorizes Tracks by small, med, large number of bytes
+SELECT
+TrackId,
+Name,
+Bytes,
+CASE
+    WHEN Bytes < 300000 THEN 'Small'
+    WHEN Bytes BETWEEN 300001 AND 500000 THEN 'Medium'
+    -- Can also repeat col name before number
+    WHEN Bytes >= 500001 THEN 'Large'
+    ELSE 'Other'
+    END BytesCategory
+FROM Track;
+
+
+----------------------------------------------------------------------
+-- Views
+----------------------------------------------------------------------
+
+
+
+
 
 
