@@ -178,7 +178,7 @@ SELECT LTRIM('---hello', '-');
 
 -- Substring SUBSTR(Name of str col, starting char, # of chars)
 SELECT FirstName,
-SUBSTR(FirstName, 2, 3)
+SUBSTR(FirstName, 1, 3)
 FROM Employee;
 
 -- UPPER and LOWER change case of string
@@ -205,7 +205,7 @@ SELECT BirthDate,
 STRFTIME('%Y', BirthDate) AS Year,
 STRFTIME('%m', BirthDate) AS Month,
 STRFTIME('%d', BirthDate) AS Day,
-STRFTIME('now') - BirthDate AS Age --This doesnt work in SQLite maybe
+STRFTIME(DATE('now')) - BirthDate AS Age 
 FROM Employee
 
 ----------------------------------------------------------------------
@@ -246,6 +246,9 @@ FROM Track;
 -- Views
 ----------------------------------------------------------------------
 
+-- Similar use as functions in R
+CREATE VIEW my_view AS
+SELECT
 
 
 
